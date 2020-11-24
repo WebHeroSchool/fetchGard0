@@ -1,23 +1,27 @@
-let userName = window.location.search;
 let user = 'Gard0';
-let url = `https://api.github.com/users/`;
+const url = `https://api.github.com/users/${user}`;
+let preloader = document.querySelector('container');
+let setDate = new Date();
 
-function searchName() {
-  if (userName) {
-    user = userName.lastIndexOf('=') !== -1 ?
-      (userName.slice(1, userName.lastIndexOf('='))) :
-      (userName.slice(1));
-  }
-}
-searchName();
+setTimeout(function () {
+  preloaderEl.classList.add('unvisible');
+}, 3000);
 
-fetch(url + user)
+const date = new Promise((resolve, reject) => {
+  setTimeout(() => date ? resolve(setDate) : reject('Время не опредено'), 2000);
+});
+
+const getUrl = new Promise((resolve, reject) => {
+  setTimeout(() => getUrl ? resolve(url) : reject('Пользователь не найден'), 4000);
+});
+
+
+Promise.all([date, getUrl])
+  .then(([setDate, url]) => fetch(url))
   .then(res => res.json())
   .then(json => {
-    console.log(json);
     const div = document.createElement('div');
     document.body.append(div);
-
     const userName = document.createElement('a');
     if (json.name !== undefined) {
       userName.textContent = json.name;
@@ -26,11 +30,9 @@ fetch(url + user)
       userName.textContent = 'Information not available'
     }
     div.append(userName);
-
     const userBio = document.createElement('h3');
     userBio.textContent = json.bio;
     div.append(userBio);
-
     const userImg = document.createElement('img');
     userImg.src = json.avatar_url;
     userImg.alt = 'user_avatar_image';
