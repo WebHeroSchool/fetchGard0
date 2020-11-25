@@ -1,25 +1,38 @@
+
+let userName = window.location.search;
 let user = 'Gard0';
-const url = `https://api.github.com/users/${user}`;
-let preloader = document.querySelector('container');
-let setDate = new Date();
+let url = `https://api.github.com/users/`;
 
+function searchName() {
+  if (userName) {
+    user = userName.lastIndexOf('=') !== -1 ?
+      (userName.slice(1, userName.lastIndexOf('='))) :
+      (userName.slice(1));
+  }
+}
+searchName();
+
+let preloader = document.getElementById('preloader');
 setTimeout(function () {
-  preloaderEl.classList.add('unvisible');
-}, 3000);
+  preloader.classList.add('invisible');
+}, 4000);
 
-const date = new Promise((resolve, reject) => {
-  setTimeout(() => date ? resolve(setDate) : reject('Время не опредено'), 2000);
+const setDate = new Date();
+let date = new Promise((resolve, reject) => {
+  setTimeout(() => date ? resolve(setDate) : reject('Время не опредено'), 1000);
 });
-
 const getUrl = new Promise((resolve, reject) => {
-  setTimeout(() => getUrl ? resolve(url) : reject('Пользователь не найден'), 4000);
+  setTimeout(() => getUrl ? resolve(url) : reject('URL не найден'), 2000);
+});
+const getName = new Promise((resolve, reject) => {
+  setTimeout(() => getName ? resolve(user) : reject('Пользователь не найден2'), 2000);
 });
 
-
-Promise.all([date, getUrl])
-  .then(([setDate, url]) => fetch(url))
+Promise.all([getUrl, getName])
+  .then(([url, userName]) => fetch(`${url}${userName}`)) //
   .then(res => res.json())
   .then(json => {
+    console.log(json);
     const div = document.createElement('div');
     document.body.append(div);
     const userName = document.createElement('a');
@@ -27,7 +40,7 @@ Promise.all([date, getUrl])
       userName.textContent = json.name;
       userName.href = json.html_url;
     } else {
-      userName.textContent = 'Information not available'
+      userName.textContent = 'Information not available probably .json'
     }
     div.append(userName);
     const userBio = document.createElement('h3');
@@ -37,6 +50,7 @@ Promise.all([date, getUrl])
     userImg.src = json.avatar_url;
     userImg.alt = 'user_avatar_image';
     div.append(userImg);
+    document.body.append(setDate);
   }
   )
   .catch(err => console.log('Information not available'));

@@ -17,7 +17,7 @@ body {
   opacity: 0;
 }
 
-.unvisible {
+.invisible {
   visibility: hidden;
   opacity: 0;
 }
