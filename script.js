@@ -8,23 +8,24 @@ function searchName() {
       (userName.slice(1, userName.lastIndexOf('='))) :
       (userName.slice(1));
   }
-}
+};
 searchName(userName);
 
 
 setTimeout(function () {
-  let preloader = document.querySelector('.container');
+  let preloader = document.querySelector('.loader');
   preloader.classList.add('invisible');
+
 
   let date = new Date();
   let setDate = new Promise((resolve, reject) => {
-    setTimeout(() => setDate ? resolve(date) : reject('Время не опредено'), 3000);
+    setTimeout(() => setDate ? resolve(date) : reject('Время не опредено'), 1000);
   });
   let getUrl = new Promise((resolve, reject) => {
-    setTimeout(() => getUrl ? resolve(url) : reject('URL не найден'), 2000);
+    setTimeout(() => getUrl ? resolve(url) : reject('URL не найден'), 1000);
   });
   let getName = new Promise((resolve, reject) => {
-    setTimeout(() => getName ? resolve(user) : reject('Пользователь не найден2'), 1000);
+    setTimeout(() => getName ? resolve(user) : reject('Пользователь не найден'), 2000);
   });
 
   Promise.all([getUrl, getName, setDate])
@@ -40,7 +41,7 @@ setTimeout(function () {
         userName.href = json.html_url;
       } else {
         userName.textContent = "Information undefined."
-      }
+      };
       div.append(userName);
       const userBio = document.createElement('h3');
       userBio.textContent = json.bio;
@@ -48,7 +49,9 @@ setTimeout(function () {
       const userImg = document.createElement('img');
       userImg.src = json.avatar_url;
       div.append(userImg);
-      document.body.append(date);
+      const userDate = document.createElement('h3');
+      userDate.textContent = date;
+      div.append(userDate);
     }
     )
-}, 2000);
+}, 4000);
