@@ -16,23 +16,15 @@ setTimeout(function () {
   let preloader = document.querySelector('.loader');
   preloader.classList.add('invisible');
 
-
   let date = new Date();
-  let setDate = new Promise((resolve, reject) => {
-    setTimeout(() => setDate ? resolve(date) : reject('Время не опредено'), 1000);
-  });
-  let getUrl = new Promise((resolve, reject) => {
-    setTimeout(() => getUrl ? resolve(url) : reject('URL не найден'), 1000);
-  });
-  let getName = new Promise((resolve, reject) => {
-    setTimeout(() => getName ? resolve(user) : reject('Пользователь не найден'), 2000);
-  });
+  let setDate = new Promise((resolve, reject) => { (date ? resolve(date) : reject('Время не опредено')); });
+  let getUrl = new Promise((resolve, reject) => { (url ? resolve(url) : reject('URL не найден')); });
+  let getName = new Promise((resolve, reject) => { (user ? resolve(user) : reject('Пользователь не найден')); });
 
   Promise.all([getUrl, getName, setDate])
     .then(([url, user]) => fetch(`${url}${user}`))
     .then(res => res.json())
     .then(json => {
-      console.log(json);
       const div = document.createElement('div');
       document.body.append(div);
       const userName = document.createElement('a');
@@ -54,4 +46,5 @@ setTimeout(function () {
       div.append(userDate);
     }
     )
+    .catch();
 }, 4000);
